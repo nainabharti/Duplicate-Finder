@@ -48,18 +48,26 @@ def calculate_hash(file_path):
 # Step 3: Group files using their hashes
 def find_duplicates(files):
     hash_groups = {}
+    total_files = len(files)
 
-    for file_path in files:
+    print("\nScanning files...")
+
+    for index, file_path in enumerate(files, start=1):
+
         file_hash = calculate_hash(file_path)
 
-        if file_hash is None:
-            continue
+        if file_hash is not None:
 
-        if file_hash in hash_groups:
-            hash_groups[file_hash].append(file_path)
+            if file_hash in hash_groups:
+                hash_groups[file_hash].append(file_path)
 
-        else:
-            hash_groups[file_hash] = [file_path]
+            else:
+                hash_groups[file_hash] = [file_path]
+
+        if index % 10 == 0 or index == total_files:
+            print(f"Progress: {index}/{total_files} files scanned")
+
+    print("\nScanning completed!")
 
     return hash_groups
 
@@ -96,6 +104,7 @@ def display_duplicates(hash_groups, total_files):
 
 # Main function
 def main():
+
     while True:
 
         print("\n================================")
