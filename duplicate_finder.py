@@ -96,34 +96,37 @@ def display_duplicates(hash_groups, total_files):
 
 # Main function
 def main():
-    print("\n================================")
-    print("       DUPLICATE FINDER")
-    print("================================")
+    while True:
 
-    print("\n1. Scan a folder")
-    print("2. Exit")
+        print("\n================================")
+        print("       DUPLICATE FINDER")
+        print("================================")
 
-    choice = input("\nEnter your choice: ").strip()
+        print("\n1. Scan a folder")
+        print("2. Exit")
 
-    if choice == "1":
+        choice = input("\nEnter your choice: ").strip()
 
-        folder_path = input("Enter folder path to scan: ").strip()
+        if choice == "1":
 
-        if not os.path.isdir(folder_path):
-            print("Error: Invalid folder path!")
-            return
+            folder_path = input("Enter folder path to scan: ").strip()
 
-        files = get_file_paths(folder_path)
+            if not os.path.isdir(folder_path):
+                print("Error: Invalid folder path!")
+                continue
 
-        hash_groups = find_duplicates(files)
+            files = get_file_paths(folder_path)
 
-        display_duplicates(hash_groups, len(files))
+            hash_groups = find_duplicates(files)
 
-    elif choice == "2":
-        print("Thank you for using Duplicate Finder!")
+            display_duplicates(hash_groups, len(files))
 
-    else:
-        print("Invalid choice! Please select 1 or 2.")
+        elif choice == "2":
+            print("Thank you for using Duplicate Finder!")
+            break
+
+        else:
+            print("Invalid choice! Please select 1 or 2.")
 
 
 if __name__ == "__main__":
