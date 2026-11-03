@@ -3,14 +3,20 @@ import hashlib
 # step 1: Collect all file paths
 def get_file_paths(folder_path):
     files = []
+    try:
+        all_files = os.listdir(folder_path)
 
-    all_files = os.listdir(folder_path)
+        for file in all_files:
+            complete_path = os.path.join(folder_path, file)
 
-    for file in all_files:
-        complete_path = os.path.join(folder_path, file)
+            if os.path.isfile(complete_path):
+                files.append(complete_path)
 
-        if os.path.isfile(complete_path):
-            files.append(complete_path)
+    except FileNotFoundError:
+        print("Error: Folder not found!")
+
+    except PermissionError:
+        print("Error: Permission denied to access folder!")
 
     return files
 
@@ -18,11 +24,20 @@ def get_file_paths(folder_path):
 def calculate_hash(file_path):
     sha256_hash = hashlib.sha256()
 
-    with open(file_path, "rb") as file:
-        content = file.read()
-        sha256_hash.update(content)
+    try:
+        with open(file_path, "rb") as file:
+            content = file.read()
+            sha256_hash.update(content)
 
-    return sha256_hash.hexdigest()
+        return sha256_hash.hexdigest()
+
+    except FileNotFoundError:
+        print(f"Error: File not found - {file_path}")
+
+    except PermissionError:
+        print(f"Error: Permission denied - {file_path}")
+
+    return None
 
 # step 3: Group file using their hashes
 def find_duplicates(files):
@@ -30,6 +45,9 @@ def find_duplicates(files):
 
     for file_path in files:
         file_hash = calculate_hash(file_path)
+
+        if file_hash is None:
+            continue
 
         if file_hash in hash_groups:
 
