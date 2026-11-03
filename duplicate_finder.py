@@ -1,8 +1,11 @@
 import os
 import hashlib
-# step 1: Collect all file paths
+
+
+# Step 1: Collect all file paths, including subfolders
 def get_file_paths(folder_path):
     files = []
+
     try:
         for root, directories, all_files in os.walk(folder_path):
 
@@ -11,24 +14,28 @@ def get_file_paths(folder_path):
                 files.append(complete_path)
 
         if not os.path.exists(folder_path):
-                print("Error: Folder not found!")
-
-                if os.path.isfile(complete_path):
-                    files.append(complete_path)
+            print("Error: Folder not found!")
 
     except PermissionError:
         print("Error: Permission denied to access folder!")
 
     return files
 
-# step 2: Calculate SHA256 hash
+
+# Step 2: Calculate SHA256 hash using chunks
 def calculate_hash(file_path):
     sha256_hash = hashlib.sha256()
 
     try:
         with open(file_path, "rb") as file:
-            content = file.read()
-            sha256_hash.update(content)
+
+            while True:
+                chunk = file.read(4096)
+
+                if not chunk:
+                    break
+
+                sha256_hash.update(chunk)
 
         return sha256_hash.hexdigest()
 
@@ -40,7 +47,8 @@ def calculate_hash(file_path):
 
     return None
 
-# step 3: Group file using their hashes
+
+# Step 3: Group files using their hashes
 def find_duplicates(files):
     hash_groups = {}
 
@@ -51,14 +59,15 @@ def find_duplicates(files):
             continue
 
         if file_hash in hash_groups:
-
             hash_groups[file_hash].append(file_path)
+
         else:
             hash_groups[file_hash] = [file_path]
 
     return hash_groups
-        
-# step 4: display only duplicate files and statistics
+
+
+# Step 4: Display duplicate files and statistics
 def display_duplicates(hash_groups, total_files):
     duplicate_count = 0
     duplicate_files = 0
@@ -81,25 +90,23 @@ def display_duplicates(hash_groups, total_files):
     if duplicate_count == 0:
         print("\nNo duplicate files found!")
 
-    print("\n---Statistics---")
+    print("\n--- Statistics ---")
     print(f"Total files scanned: {total_files}")
     print(f"Total duplicate groups: {duplicate_count}")
     print(f"Total duplicate files: {duplicate_files}")
     print(f"Total extra copies: {extra_copies}")
 
-# main function
+
+# Main function
 def main():
     folder_path = "test-files"
 
     files = get_file_paths(folder_path)
 
-    print("Files found:")
-    print(files)
-
     hash_groups = find_duplicates(files)
 
     display_duplicates(hash_groups, len(files))
 
+
 if __name__ == "__main__":
     main()
-
