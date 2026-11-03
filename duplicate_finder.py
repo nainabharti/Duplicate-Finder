@@ -13,9 +13,6 @@ def get_file_paths(folder_path):
                 complete_path = os.path.join(root, file)
                 files.append(complete_path)
 
-        if not os.path.exists(folder_path):
-            print("Error: Folder not found!")
-
     except PermissionError:
         print("Error: Permission denied to access folder!")
 
@@ -99,7 +96,13 @@ def display_duplicates(hash_groups, total_files):
 
 # Main function
 def main():
-    folder_path = "test-files"
+    print("===== Duplicate Finder =====")
+
+    folder_path = input("Enter folder path to scan: ").strip()
+
+    if not os.path.isdir(folder_path):
+        print("Error: Invalid folder path!")
+        return
 
     files = get_file_paths(folder_path)
 
