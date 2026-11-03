@@ -1,6 +1,6 @@
 import os
 import hashlib
-#1.
+# step 1: Collect all file paths
 def get_file_paths(folder_path):
     files = []
 
@@ -14,7 +14,7 @@ def get_file_paths(folder_path):
 
     return files
 
-#2.
+# step 2: Calculate SHA256 hash
 def calculate_hash(file_path):
     sha256_hash = hashlib.sha256()
 
@@ -24,6 +24,22 @@ def calculate_hash(file_path):
 
     return sha256_hash.hexdigest()
 
+# step 3: Group file using their hashes
+def find_duplicates(files):
+    hash_groups = {}
+
+    for file_path in files:
+        file_hash = calculate_hash(file_path)
+
+        if file_hash in hash_groups:
+
+            hash_groups[file_hash].append(file_path)
+        else:
+            hash_groups[file_hash] = [file_path]
+
+    return hash_groups
+        
+
 def main():
     folder_path = "test-files"
 
@@ -32,9 +48,10 @@ def main():
     print("Files found:")
     print(files)
 
-    for file_path in files:
-        result = calculate_hash(file_path)
-        print(file_path, result)
+    hash_groups = find_duplicates(files)
+
+    print("\nFiles grouped by hash: ")
+    print(hash_groups)
 
 if __name__ == "__main__":
     main()
