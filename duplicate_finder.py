@@ -4,16 +4,17 @@ import hashlib
 def get_file_paths(folder_path):
     files = []
     try:
-        all_files = os.listdir(folder_path)
+        for root, directories, all_files in os.walk(folder_path):
 
-        for file in all_files:
-            complete_path = os.path.join(folder_path, file)
-
-            if os.path.isfile(complete_path):
+            for file in all_files:
+                complete_path = os.path.join(root, file)
                 files.append(complete_path)
 
-    except FileNotFoundError:
-        print("Error: Folder not found!")
+        if not os.path.exists(folder_path):
+                print("Error: Folder not found!")
+
+                if os.path.isfile(complete_path):
+                    files.append(complete_path)
 
     except PermissionError:
         print("Error: Permission denied to access folder!")
@@ -85,7 +86,8 @@ def display_duplicates(hash_groups, total_files):
     print(f"Total duplicate groups: {duplicate_count}")
     print(f"Total duplicate files: {duplicate_files}")
     print(f"Total extra copies: {extra_copies}")
-   
+
+# main function
 def main():
     folder_path = "test-files"
 
