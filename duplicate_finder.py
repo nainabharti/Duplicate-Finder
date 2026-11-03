@@ -39,6 +39,24 @@ def find_duplicates(files):
 
     return hash_groups
         
+# step 4: display only duplicate files
+def display_duplicates(hash_groups):
+    duplicate_count = 0
+
+    for file_hash, file_list in hash_groups.items():
+
+        if len(file_list) > 1:
+            duplicate_count += 1
+
+            print(f"\nDuplicate Group {duplicate_count}:")
+
+            for file_path in file_list:
+                print(file_path)
+
+    if duplicate_count == 0:
+        print("\nNo duplicate files found!")
+    else:
+        print(f"\nTotal duplicate groups: {duplicate_count}")
 
 def main():
     folder_path = "test-files"
@@ -50,9 +68,7 @@ def main():
 
     hash_groups = find_duplicates(files)
 
-    print("\nFiles grouped by hash: ")
-    print(hash_groups)
-
+    display_duplicates(hash_groups)
 if __name__ == "__main__":
     main()
 
