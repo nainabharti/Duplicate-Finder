@@ -16,7 +16,8 @@ def get_file_paths(folder_path, extensions=None):
         print(f"Error accessing folder: {error}")
 
     for root, directories, all_files in os.walk(
-        folder_path, onerror=handle_walk_error):
+        folder_path, onerror=handle_walk_error
+    ):
 
         for file in all_files:
 
@@ -33,7 +34,7 @@ def get_file_paths(folder_path, extensions=None):
     return files
 
 
-# STEP 2: Calculate SHA-256 hash of a file
+# STEP 2: Calculate SHA-256 hash
 def calculate_hash(file_path):
 
     sha256_hash = hashlib.sha256()
@@ -64,7 +65,7 @@ def calculate_hash(file_path):
     return None
 
 
-# STEP 3: Find duplicate files using their hashes
+# STEP 3: Find duplicate files
 def find_duplicates(files):
 
     hash_groups = {}
@@ -89,7 +90,7 @@ def find_duplicates(files):
             else:
                 hash_groups[file_hash] = [file_path]
 
-        # STEP 4: Display scanning progress
+        # STEP 4: Display progress
         if index % 10 == 0 or index == total_files:
             print(f"Progress: {index}/{total_files} files scanned")
 
@@ -98,7 +99,7 @@ def find_duplicates(files):
     return hash_groups, failed_files
 
 
-# STEP 5: Convert bytes into readable storage units
+# STEP 5: Convert bytes into readable units
 def format_size(size_bytes):
 
     size = float(size_bytes)
@@ -113,7 +114,7 @@ def format_size(size_bytes):
     return f"{size:.2f} PB"
 
 
-# STEP 6: Generate duplicate report and statistics
+# STEP 6: Generate duplicate report
 def generate_report(hash_groups, total_files, folder_path,
                     failed_files=None):
 
@@ -212,7 +213,7 @@ def display_report(report):
     print(report)
 
 
-# STEP 8: Save report as a text file
+# STEP 8: Save report
 def save_report(report):
 
     os.makedirs("reports", exist_ok=True)
@@ -234,7 +235,7 @@ def save_report(report):
         print(f"Error saving report: {error}")
 
 
-# STEP 9: Delete duplicate files with user confirmation
+# STEP 9: Delete duplicate files with confirmation
 def delete_duplicates(hash_groups):
 
     duplicate_groups = [
@@ -298,7 +299,7 @@ def delete_duplicates(hash_groups):
     print(f"\nTotal files deleted: {deleted_count}")
 
 
-# STEP 10: Scan folder and perform all operations
+# STEP 10: Scan folder and perform operations
 def scan_folder():
 
     folder_path = input(
@@ -365,7 +366,7 @@ def scan_folder():
 
     display_report(report)
 
-    # STEP 15: Give user options
+    # STEP 15: Display available actions
     print("\n1. Save report")
     print("2. Delete duplicate copies")
     print("3. Return to main menu")
@@ -410,6 +411,5 @@ def main():
             print("\nInvalid choice! Please select 1 or 2.")
 
 
-# STEP 17: Program entry point
 if __name__ == "__main__":
     main()
